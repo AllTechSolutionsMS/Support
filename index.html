@@ -1,101 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>All Tech Solutions | Downloads</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <title>AllTech Solutions | Downloads</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <style>
     body {
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      font-family: Arial, sans-serif;
       background: #f4f6f8;
-      color: #333;
     }
-
     header {
       background: #0b3c5d;
-      color: #fff;
-      padding: 30px 20px;
+      color: white;
+      padding: 30px;
       text-align: center;
     }
-
-    header h1 {
-      margin: 0;
-      font-size: 28px;
-    }
-
-    header p {
-      margin-top: 8px;
-      font-size: 16px;
-      opacity: 0.9;
-    }
-
     main {
       max-width: 900px;
       margin: 40px auto;
-      padding: 0 20px;
-    }
-
-    .card {
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
       padding: 20px;
     }
-
-    .file-list {
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,.1);
+    }
+    ul {
       list-style: none;
       padding: 0;
-      margin: 0;
     }
-
-    .file-item {
+    li {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      padding: 14px 12px;
+      padding: 12px;
       border-bottom: 1px solid #eee;
     }
-
-    .file-item:last-child {
-      border-bottom: none;
-    }
-
-    .file-name {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 15px;
-    }
-
-    .icon {
-      font-size: 20px;
-    }
-
-    .download-btn {
-      background: #0b7dda;
-      color: #fff;
-      padding: 8px 14px;
-      border-radius: 5px;
+    a {
       text-decoration: none;
-      font-size: 14px;
-      white-space: nowrap;
+      color: #0b7dda;
+    }
+    .btn {
+      background: #0b7dda;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>AllTech Solutions</h1>
+    <p>Support Downloads</p>
+  </header>
+
+  <main>
+    <div class="card">
+      <ul id="files">
+        <li>Loading files…</li>
+      </ul>
+    </div>
+  </main>
+
+<script>
+const owner = "AllTechSolutionsMS";
+const repo = "Support";
+
+async function loadFiles() {
+  const list = document.getElementById("files");
+
+  try {
+    const repoInfo = await fetch(`https://api.github.com/repos/${owner}/${repo}`).then(r => r.json());
+    const branch = repoInfo.default_branch;
+
+    const files = await fetch(
+      `https://api.github.com/repos/${owner}/${repo}/contents?ref=${branch}`
+    ).then(r => r.json());
+
+    list.innerHTML = "";
+
+    files
+      .filter(f => f.type === "file" && f.name !== "index.html")
+      .forEach(file => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <span>${file.name}</span>
+          <a class="btn" href="${file.download_url}">Download</a>
+        `;
+        list.appendChild(li);
+      });
+
+    if (!list.children.length) {
+      list.innerHTML = "<li>No files found.</li>";
     }
 
-    .download-btn:hover {
-      background: #095fa3;
-    }
+  } catch (e) {
+    list.innerHTML = "<li>Unable to load files.</li>";
+  }
+}
 
-    footer {
-      text-align: center;
-      margin: 30px 0;
-      font-size: 13px;
-      color: #777;
-    }
+loadFiles();
+</script>
 
-    @media (max-width: 600px) {
-      .file-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1
+</body>
+</html>
