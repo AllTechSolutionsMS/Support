@@ -1,68 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Support Downloads</title>
+  <meta charset="UTF-8" />
+  <title>All Tech Solutions | Downloads</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <style>
     body {
-      font-family: Arial, sans-serif;
-      margin: 40px;
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: #f4f6f8;
+      color: #333;
     }
-    h1 {
-      margin-bottom: 10px;
+
+    header {
+      background: #0b3c5d;
+      color: #fff;
+      padding: 30px 20px;
+      text-align: center;
     }
-    ul {
-      list-style-type: none;
+
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    header p {
+      margin-top: 8px;
+      font-size: 16px;
+      opacity: 0.9;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+      padding: 20px;
+    }
+
+    .file-list {
+      list-style: none;
       padding: 0;
+      margin: 0;
     }
-    li {
-      margin: 8px 0;
+
+    .file-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 12px;
+      border-bottom: 1px solid #eee;
     }
-    a {
+
+    .file-item:last-child {
+      border-bottom: none;
+    }
+
+    .file-name {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 15px;
+    }
+
+    .icon {
+      font-size: 20px;
+    }
+
+    .download-btn {
+      background: #0b7dda;
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 5px;
       text-decoration: none;
-      color: #0066cc;
+      font-size: 14px;
+      white-space: nowrap;
     }
-    a:hover {
-      text-decoration: underline;
+
+    .download-btn:hover {
+      background: #095fa3;
     }
-  </style>
-</head>
-<body>
-  <h1>Support Downloads</h1>
-  <ul id="file-list">Loading files...</ul>
 
-  <script>
-    const owner = "AllTechSolutionsMS";
-    const repo = "Support";
-    const branch = "main";
+    footer {
+      text-align: center;
+      margin: 30px 0;
+      font-size: 13px;
+      color: #777;
+    }
 
-    fetch(`https://api.github.com/repos/${owner}/${repo}/contents?ref=${branch}`)
-      .then(response => response.json())
-      .then(files => {
-        const list = document.getElementById("file-list");
-        list.innerHTML = "";
-
-        files.forEach(file => {
-          if (file.type === "file" && file.name !== "index.html") {
-            const li = document.createElement("li");
-            const link = document.createElement("a");
-
-            link.href = file.download_url;
-            link.textContent = file.name;
-
-            li.appendChild(link);
-            list.appendChild(li);
-          }
-        });
-
-        if (list.innerHTML === "") {
-          list.innerHTML = "<li>No files found.</li>";
-        }
-      })
-      .catch(() => {
-        document.getElementById("file-list").innerHTML =
-          "<li>Error loading files.</li>";
-      });
-  </script>
-</body>
-</html>
+    @media (max-width: 600px) {
+      .file-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1
