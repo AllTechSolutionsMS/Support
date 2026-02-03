@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Support Downloads</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+    }
+    h1 {
+      margin-bottom: 10px;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      margin: 8px 0;
+    }
+    a {
+      text-decoration: none;
+      color: #0066cc;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>Support Downloads</h1>
+  <ul id="file-list">Loading files...</ul>
+
+  <script>
+    const owner = "AllTechSolutionsMS";
+    const repo = "Support";
+    const branch = "main";
+
+    fetch(`https://api.github.com/repos/${owner}/${repo}/contents?ref=${branch}`)
+      .then(response => response.json())
+      .then(files => {
+        const list = document.getElementById("file-list");
+        list.innerHTML = "";
+
+        files.forEach(file => {
+          if (file.type === "file" && file.name !== "index.html") {
+            const li = document.createElement("li");
+            const link = document.createElement("a");
+
+            link.href = file.download_url;
+            link.textContent = file.name;
+
+            li.appendChild(link);
+            list.appendChild(li);
+          }
+        });
+
+        if (list.innerHTML === "") {
+          list.innerHTML = "<li>No files found.</li>";
+        }
+      })
+      .catch(() => {
+        document.getElementById("file-list").innerHTML =
+          "<li>Error loading files.</li>";
+      });
+  </script>
+</body>
+</html>
